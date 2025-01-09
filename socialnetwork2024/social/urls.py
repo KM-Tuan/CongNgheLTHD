@@ -6,6 +6,8 @@ from social import views
 r = DefaultRouter()
 r.register('categories', views.CategoryViewSet, basename='category')
 r.register('topics', views.TopicViewSet, basename='topic')
+r.register('posts', views.PostViewSet, basename='post')
+r.register('users', views.UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(r.urls )),

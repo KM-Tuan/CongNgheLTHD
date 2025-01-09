@@ -1,9 +1,25 @@
 from django.contrib import admin
+from django.db.models import Count
+from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-
 from social.models import Category, Topic, Post
+from django.urls import path
+
+
+# Trang chủ thống kê chủ đề
+class MyTopicAdmin(admin.AdminSite):
+    site_header = "HỆ THỐNG SOCIAL NETWORK MANAGER"
+
+    def get_urls(self):
+        return [path('stats/', self.stats)] + super().get_urls()
+
+    def stats(self, request):
+        stats = Category.objects.annotate(count=Count('topic__id')).values('id', 'name', 'count')
+        return TemplateResponse(request, 'admin/stats.html', {
+            'stats': stats
+        })
 
 
 class PostForm(forms.ModelForm):  # Tạo form tùy chỉnh ô nội dung
@@ -26,6 +42,8 @@ class PostAdmin(admin.ModelAdmin):  # Ghi đè lớp Post để tùy chỉnh gia
 
 
 # Hiển thị lên trang web admin
-admin.site.register(Category)
-admin.site.register(Topic)
-admin.site.register(Post, PostAdmin)
+admin_site = MyTopicAdmin()
+
+admin_site.register(Category)
+admin_site.register(Topic)
+admin_site.register(Post, PostAdmin)

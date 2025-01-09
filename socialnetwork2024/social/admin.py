@@ -25,7 +25,7 @@ class PostAdmin(admin.ModelAdmin):  # Ghi đè lớp Post để tùy chỉnh gia
         return mark_safe(f"<img src='/static/{post.image.name}' width=200 /")
 
 
-# Hiển lên trang web admin
+# Hiển thị lên trang web admin
 admin.site.register(Category)
 admin.site.register(Topic)
 admin.site.register(Post, PostAdmin)

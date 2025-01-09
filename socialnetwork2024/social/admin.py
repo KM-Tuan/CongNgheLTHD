@@ -6,7 +6,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from social.models import Category, Topic, Post
 
 
-class PostForm(forms.ModelForm):
+class PostForm(forms.ModelForm):  # Tạo form tùy chỉnh ô nội dung
     content = forms.CharField(widget=CKEditorUploadingWidget)
 
     class Meta:
@@ -14,17 +14,18 @@ class PostForm(forms.ModelForm):
         fields = '__all__'
 
 
-class PostAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'active', 'created_date']
-    search_fields = ['title', 'content']
-    list_filter = ['id', 'title', 'created_date']
-    readonly_fields = ['avatar']
-    form = PostForm
+class PostAdmin(admin.ModelAdmin):  # Ghi đè lớp Post để tùy chỉnh giao diện
+    list_display = ['id', 'title', 'active', 'created_date']  # Hiển thị thông tin các cột
+    search_fields = ['title', 'content']  # Hiển thị ô tìm kiếm
+    list_filter = ['id', 'title', 'created_date']  # Hiển thị khung lọc
+    readonly_fields = ['avatar']  # Hiển thị ảnh xem trước trong mục nhập thông tin
+    form = PostForm  # Tùy chỉnh ô nội dung
 
     def avatar(self, post):
         return mark_safe(f"<img src='/static/{post.image.name}' width=200 /")
 
 
+# Hiển lên trang web admin
 admin.site.register(Category)
 admin.site.register(Topic)
 admin.site.register(Post, PostAdmin)

@@ -6,7 +6,7 @@ from cloudinary.models import CloudinaryField
 
 
 class User(AbstractUser):
-    avatar = CloudinaryField('avatar', null=True)
+    avatar = CloudinaryField( null=True)
 
 
 class Category(models.Model):

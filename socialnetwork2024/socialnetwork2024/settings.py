@@ -42,7 +42,14 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'rest_framework',
     'drf_yasg',
+    'oauth2_provider',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 AUTH_USER_MODEL = 'social.User'
 
@@ -137,8 +144,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import cloudinary
 
 cloudinary.config(
-    cloud_name="dq1oo3fod",
-    api_key="216276187471198",
-    api_secret="IPwc-sSRfgqIY30pkisZ_SBINC8",
+    cloud_name="djlyy5s5e",
+    api_key="248579782829654",
+    api_secret="sxkpzv4-ePJKtM6PFD6ZUi6FHxE",  # Click 'View API Keys' above to copy your API secret
     secure=True
 )

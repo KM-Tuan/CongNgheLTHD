@@ -51,9 +51,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         return u
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['avatar'] = instance.avatar.url
+        return data
+
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'avatar', 'username', 'password']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'avatar']
         extra_kwargs = {
             'password': {
                 'write_only': True

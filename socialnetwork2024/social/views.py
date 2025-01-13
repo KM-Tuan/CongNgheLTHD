@@ -1,8 +1,8 @@
 from pickle import FALSE
 
 from rest_framework import viewsets, generics, permissions
-from social.models import Category, Topic, Post, User
-from social import serializers, paginators
+from social.models import Category, Topic, Post, User, Comment
+from social import serializers, paginators, perms
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
@@ -40,10 +40,20 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
     queryset = Post.objects.prefetch_related('tag').filter(active=True)
     serializer_class = serializers.PostDetailsSerializer
 
-    @action(methods=['get'], url_path='comments', detail=True)
+    def get_permissions(self):
+        if self.action in ['get_comments'] and self.request.method.__eq__("POST"):
+            return [permissions.IsAuthenticated()]
+
+        return [permissions.AllowAny()]
+
+    @action(methods=['get', 'post'], url_path='comments', detail=True)
     def get_comments(self, request, pk):  # Lấy danh sách các comment thuộc bài post
-        comments = self.get_object().comment_set.select_related('user').filter(active=True)
-        return Response(serializers.CommentSerializer(comments, many=True).data)
+        if request.method.__eq__("POST"):
+            c = Comment.objects.create(user=request.user, post=self.get_object(), content=request.data.get('content'))
+            return Response(serializers.CommentSerializer(c).data)
+        else:
+            comments = self.get_object().comment_set.select_related('user').filter(active=True)
+            return Response(serializers.CommentSerializer(comments, many=True).data)
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
@@ -53,3 +63,9 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
     @action(methods=['get'], url_path='current-user', detail=False, permission_classes=[permissions.IsAuthenticated])
     def get_user(self, request):
         return Response(serializers.UserSerializer(request.user).data)
+
+
+class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView):
+    queryset = Comment.objects.filter(active=True)
+    serializers_class = serializers.CommentSerializer
+    permission_classes = [perms.OwnerPermission]

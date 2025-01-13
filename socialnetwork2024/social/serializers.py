@@ -53,7 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['avatar'] = instance.avatar.url
+        data['avatar'] = instance.avatar.url if instance.avatar else ''
         return data
 
     class Meta:

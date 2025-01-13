@@ -1,7 +1,9 @@
-from rest_framework import viewsets, generics
+from pickle import FALSE
+
+from rest_framework import viewsets, generics, permissions
 from social.models import Category, Topic, Post, User
 from social import serializers, paginators
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
 
@@ -47,3 +49,7 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
     queryset = User.objects.filter(is_active=True)
     serializer_class = serializers.UserSerializer
+
+    @action(methods=['get'], url_path='current-user', detail=False, permission_classes=[permissions.IsAuthenticated])
+    def get_user(self, request):
+        return Response(serializers.UserSerializer(request.user).data)

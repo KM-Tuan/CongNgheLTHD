@@ -149,3 +149,8 @@ cloudinary.config(
     api_secret="sxkpzv4-ePJKtM6PFD6ZUi6FHxE",  # Click 'View API Keys' above to copy your API secret
     secure=True
 )
+
+OAUTH2_PROVIDER = { 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore' }
+#Client của Hoàng
+# CLIENT_ID = "sk88zYNryhW9rJCe0IWtvc9gTfc6HIrIPU3rZwwo"
+# CLIENT_SECRET = "9ow1onA8S3Xr6kvrFTabEveDFD1RCNZc7aOSy5VOWaF07bP8PouHxkTBVFJ8HM0y47GeaRbU74WUfjDVXafrPLWyvmpY2NufmOU9AC9qaEdang51qWSfrLvLPqjRz3FL"

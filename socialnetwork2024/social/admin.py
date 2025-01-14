@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.hashers import make_password
 from django.db.models import Count
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
@@ -41,12 +42,20 @@ class PostAdmin(admin.ModelAdmin):  # Ghi đè lớp Post để tùy chỉnh gia
         return mark_safe(f"<img src='/static/{post.image.name}' width=200 /")
 
 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['id', 'username', 'is_active', 'is_staff']
+    search_fields = ['username', 'email']
+
+    def save_model(self, request, obj, form, change):
+        obj.password = make_password(obj.password)
+        super().save_model(request, obj, form, change)
+
 # Hiển thị lên trang web admin
 admin_site = MyTopicAdmin()
 
 admin_site.register(Category)
 admin_site.register(Topic)
-admin_site.register(User)
+admin_site.register(User, UserAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(Tag)
 admin_site.register(Comment)

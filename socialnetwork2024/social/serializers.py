@@ -44,11 +44,9 @@ class PostDetailsSerializer(PostSerializer):
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):  # Băm mật khẩu
         data = validated_data.copy()
-
         u = User(**data)
         u.set_password(u.password)
         u.save()
-
         return u
 
     def to_representation(self, instance):

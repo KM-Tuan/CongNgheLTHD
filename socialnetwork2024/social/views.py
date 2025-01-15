@@ -1,11 +1,12 @@
 from pickle import FALSE
+from turtledemo.penrose import start
+import tkinter
 
 from rest_framework import viewsets, generics, permissions
-from social.models import Category, Topic, Post, User, Comment
+from social.models import Category, Topic, Post, User, Comment, Like
 from social import serializers, paginators, perms
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
-
 
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):  # API Category
@@ -42,13 +43,13 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
     serializer_class = serializers.PostDetailsSerializer
 
     def get_permissions(self):
-        if self.action in ['get_comments'] and self.request.method in ['POST']:
+        if self.action in ['get_comments', 'like'] and self.request.method in ['POST']:
             return [permissions.IsAuthenticated()]
 
         return [permissions.AllowAny()]
 
     @action(methods=['get', 'post'], url_path='comments', detail=True)
-    def get_comments(self, request, pk): # Lấy danh sách các comment thuộc bài post
+    def get_comments(self, request, pk):  # Lấy danh sách các comment thuộc bài post
         if request.method.__eq__('POST'):
             content = request.data.get('content')
             c = Comment.objects.create(content=content, user=request.user, post=self.get_object())
@@ -56,6 +57,15 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
         else:
             comments = self.get_object().comment_set.select_related('user').filter(active=True)
             return Response(serializers.CommentSerializer(comments, many=True).data)
+
+    @action(methods=['post'], url_path='likes', detail=True)
+    def like(self, request, pk):
+        like, created = Like.objects.get_or_create(user=request.user, post=self.get_object())
+        if not created:
+            like.active = not like.active
+            like.save()
+
+        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data, status=start().HTTP_200_OK)
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
@@ -67,7 +77,7 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
         return Response(serializers.UserSerializer(request.user).data)
 
 
-class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView):
+class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView, generics.UpdateAPIView):
     queryset = Comment.objects.filter(active=True)
     serializer_class = serializers.CommentSerializer
     permission_classes = [perms.OwnerPerms]

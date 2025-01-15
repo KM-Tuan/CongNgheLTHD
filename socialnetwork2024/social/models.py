@@ -57,6 +57,7 @@ class Tag(BaseModel):
 
 
 class Interaction(BaseModel):  # Lớp trừu tượng
+    active = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 

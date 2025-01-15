@@ -67,7 +67,7 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
         return Response(serializers.UserSerializer(request.user).data)
 
 
-class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView):
+class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView, generics.UpdateAPIView):
     queryset = Comment.objects.filter(active=True)
     serializer_class = serializers.CommentSerializer
     permission_classes = [perms.OwnerPerms]

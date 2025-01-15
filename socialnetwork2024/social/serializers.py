@@ -35,10 +35,16 @@ class TagSerializer(serializers.ModelSerializer):
 
 class PostDetailsSerializer(PostSerializer):
     tag = TagSerializer(many=True)
+    like = serializers.SerializerMethodField()
+
+    def get_like(self, post):
+        request = self.context.get('request')
+        if request.user.is_authenticated:
+            return post.like_set.filter(active=True).exists()
 
     class Meta:
         model = PostSerializer.Meta.model
-        fields = PostSerializer.Meta.fields + ['content', 'tag']
+        fields = PostSerializer.Meta.fields + ['content', 'tag', 'like']
 
 
 class UserSerializer(serializers.ModelSerializer):

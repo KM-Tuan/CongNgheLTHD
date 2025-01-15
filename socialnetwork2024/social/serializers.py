@@ -36,15 +36,27 @@ class TagSerializer(serializers.ModelSerializer):
 class PostDetailsSerializer(PostSerializer):
     tag = TagSerializer(many=True)
     like = serializers.SerializerMethodField()
+    haha = serializers.SerializerMethodField()
+    love = serializers.SerializerMethodField()
 
-    def get_like(self, post):
+    def get_like(self,post):
         request = self.context.get('request')
         if request.user.is_authenticated:
             return post.like_set.filter(active=True).exists()
 
+    def get_haha(self,post):
+        request = self.context.get('request')
+        if request.user.is_authenticated:
+            return post.haha_set.filter(active=True).exists()
+
+    def get_love(self, post):
+        request = self.context.get('request')
+        if request.user.is_authenticated:
+            return post.love_set.filter(active=True).exists()
+
     class Meta:
         model = PostSerializer.Meta.model
-        fields = PostSerializer.Meta.fields + ['content', 'tag', 'like']
+        fields = PostSerializer.Meta.fields + ['content', 'tag', 'like', 'haha', 'love']
 
 
 class UserSerializer(serializers.ModelSerializer):

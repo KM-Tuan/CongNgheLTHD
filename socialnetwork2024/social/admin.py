@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from social.models import Category, Topic, Post, Tag, Comment, User
+from social.models import Category, Topic, Post, Tag, Comment, User, Like, Haha, Love
 from django.urls import path
 
 
@@ -58,4 +58,7 @@ admin_site.register(Topic)
 admin_site.register(User, UserAdmin)
 admin_site.register(Post, PostAdmin)
 admin_site.register(Tag)
+admin_site.register(Like)
+admin_site.register(Haha)
+admin_site.register(Love)
 admin_site.register(Comment)

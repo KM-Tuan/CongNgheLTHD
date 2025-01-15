@@ -3,7 +3,7 @@ from turtledemo.penrose import start
 import tkinter
 
 from rest_framework import viewsets, generics, permissions
-from social.models import Category, Topic, Post, User, Comment, Like
+from social.models import Category, Topic, Post, User, Comment, Like, Haha, Love
 from social import serializers, paginators, perms
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
@@ -43,7 +43,7 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
     serializer_class = serializers.PostDetailsSerializer
 
     def get_permissions(self):
-        if self.action in ['get_comments', 'like'] and self.request.method in ['POST']:
+        if self.action in ['get_comments', 'like', 'haha', 'love'] and self.request.method in ['POST']:
             return [permissions.IsAuthenticated()]
 
         return [permissions.AllowAny()]
@@ -64,8 +64,23 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
         if not created:
             like.active = not like.active
             like.save()
+        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
 
-        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data, status=start().HTTP_200_OK)
+    @action(methods=['post'], url_path='hahas', detail=True)
+    def haha(self, request, pk):
+        haha, created = Haha.objects.get_or_create(user=request.user, post=self.get_object())
+        if not created:
+            haha.active = not haha.active
+            haha.save()
+        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
+
+    @action(methods=['post'], url_path='loves', detail=True)
+    def love(self, request, pk):
+        love, created = Love.objects.get_or_create(user=request.user, post=self.get_object())
+        if not created:
+            love.active = not love.active
+            love.save()
+        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User

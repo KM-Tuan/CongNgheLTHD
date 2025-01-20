@@ -9,6 +9,8 @@ from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
 
+
+
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):  # API Category
     queryset = Category.objects.all()
     serializer_class = serializers.CategorySerializer
@@ -48,6 +50,18 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 
         return [permissions.AllowAny()]
 
+    def validate_reaction(self, user, post, reaction_type):
+        """
+        Kiểm tra xem user đã thả cảm xúc nào khác chưa.
+        Nếu đã thả cảm xúc khác, raise ValidationError.
+        """
+        if reaction_type != 'like' and Like.objects.filter(user=user, post=post, active=True).exists():
+            raise serializers.ValidationError("You already liked this post.")
+        if reaction_type != 'haha' and Haha.objects.filter(user=user, post=post, active=True).exists():
+            raise serializers.ValidationError("You already reacted with 'haha' to this post.")
+        if reaction_type != 'love' and Love.objects.filter(user=user, post=post, active=True).exists():
+            raise serializers.ValidationError("You already reacted with 'love' to this post.")
+
     @action(methods=['get', 'post'], url_path='comments', detail=True)
     def get_comments(self, request, pk):  # Lấy danh sách các comment thuộc bài post
         if request.method.__eq__('POST'):
@@ -60,6 +74,8 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 
     @action(methods=['post'], url_path='likes', detail=True)
     def like(self, request, pk):
+        post = self.get_object()
+        self.validate_reaction(request.user, post, 'like')
         like, created = Like.objects.get_or_create(user=request.user, post=self.get_object())
         if not created:
             like.active = not like.active
@@ -68,6 +84,8 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 
     @action(methods=['post'], url_path='hahas', detail=True)
     def haha(self, request, pk):
+        post = self.get_object()
+        self.validate_reaction(request.user, post, 'haha')
         haha, created = Haha.objects.get_or_create(user=request.user, post=self.get_object())
         if not created:
             haha.active = not haha.active
@@ -76,6 +94,8 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 
     @action(methods=['post'], url_path='loves', detail=True)
     def love(self, request, pk):
+        post = self.get_object()
+        self.validate_reaction(request.user, post, 'love')
         love, created = Love.objects.get_or_create(user=request.user, post=self.get_object())
         if not created:
             love.active = not love.active

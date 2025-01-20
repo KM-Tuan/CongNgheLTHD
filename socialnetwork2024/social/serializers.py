@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from social.models import Category, Topic, Post, Tag, User, Comment
+from rest_framework.exceptions import ValidationError
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -88,3 +89,5 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'created_date', 'content', 'user']
+
+

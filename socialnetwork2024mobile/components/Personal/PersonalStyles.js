@@ -1,85 +1,34 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: 10,
-      backgroundColor: '#f5f5f5',
-    },
-    headerTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-    searchBox: {
-      flex: 1,
-      marginLeft: 10,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      borderRadius: 5,
-      padding: 5,
-    },
-    mainContent: {
-      padding: 10,
-    },
-    post: {
-      marginBottom: 20,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 5,
-    },
-    postHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 10,
-    },
-    avatar: { width: 40, 
-        height: 40, backgroundColor: '#ccc', 
-        borderRadius: 20, 
-        marginRight: 10 },
-    username: {
-      fontWeight: 'bold',
-    },
-    postDate: {
-      color: '#666',
-      fontSize: 12,
-    },
-    postText: {
-      marginBottom: 5,
-    },
-    tag: {
-      color: '#007BFF',
-      marginBottom: 10,
-    },
-    postFooter: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    reactions: {
-      fontSize: 12,
-      color: '#666',
-    },
-    comments: {
-      fontSize: 12,
-      color: '#666',
-    },
-    footer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      padding: 10,
-      borderTopWidth: 1,
-      borderColor: '#ddd',
-    },
-    footerButton: {
-      alignItems: 'center',
-    },
-    footerButtonText: {
-      fontSize: 16,
-    },
-  });
+    container: { flex: 1, backgroundColor: '#f8f8f8' },
+    header: { flexDirection: 'row', alignItems: 'center', padding: 10, backgroundColor: '#fff', elevation: 2 },
+    headerTitle: { fontSize: 18, fontWeight: 'bold' },
+    searchBar: { flex: 2, marginHorizontal: 10, padding: 5, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 },
+    menuButton: { padding: 5 },
+    menuText: { fontSize: 20 },
+    content: { padding: 10 },
+
+    info: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 20, elevation: 1 },
+    avatarCover: { width: 355, height: 80, marginRight: 10, marginBottom: 5 },
+    avatar: { width: 100, height: 100, marginBottom: 5, marginLeft: 20, marginTop: -40, borderRadius: 50 },
+    author: { fontSize: 18, fontWeight: 'bold', marginLeft: 130, marginTop: -48, marginBottom: 30},
+
+
+    post: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 20, elevation: 1 },
+    HeaderRow: { flexDirection: 'row', marginBottom: 5},
+    HeaderCol: { flexDirection: 'column'},
+    postAvatar: { width: 40, height: 40, backgroundColor: '#ccc', borderRadius: 20, marginRight: 10 },
+    postImage: { width: 355, height: 175, marginRight: 10, marginBottom: 5 },
+    postAuthor: { fontSize: 16, fontWeight: 'bold' },
+    postDate: { fontSize: 12, color: '#555' },
+    postCategory: { marginTop: 4, fontSize: 12 },
+    postTitle: { fontSize: 14, marginBottom: 5 },
+    postContent: { fontSize: 14, marginBottom: 5 },
+    postTag: { fontSize: 14, color: '#007BFF', marginBottom: 5 },
+    postFooter: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
+    postStats: { fontSize: 12, color: '#555' },
+    postComments: { fontSize: 12, color: '#555' },
+    actions: { flexDirection: 'row', justifyContent: 'space-around' },
+    actionButton: { fontSize: 14, color: 'black' },
+});

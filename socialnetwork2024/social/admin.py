@@ -43,8 +43,9 @@ class PostAdmin(admin.ModelAdmin):  # Ghi đè lớp Post để tùy chỉnh gia
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'is_active', 'is_staff']
+    list_display = ['id', 'username', 'is_active', 'is_staff', 'role']
     search_fields = ['username', 'email']
+    list_filter = ('role', 'is_active')
 
     def save_model(self, request, obj, form, change):
         obj.password = make_password(obj.password)

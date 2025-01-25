@@ -55,7 +55,7 @@ export default Personal = () => {
             <FontAwesome name="thumbs-up" size={20} color="black" style={{ marginRight: 12 }}/>
               <Text style={PersonalStyles.actionButton}>Thích</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => nav.navigate('postdetails')} style={{ flexDirection: 'row', alignItems: 'center' }}>
             <FontAwesome name="comment" size={20} color="black" style={{ marginRight: 12 }}/>
               <Text style={PersonalStyles.actionButton}>Bình luận</Text>
             </TouchableOpacity>

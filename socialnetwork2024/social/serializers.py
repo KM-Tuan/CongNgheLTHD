@@ -71,11 +71,12 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['avatar'] = instance.avatar.url if instance.avatar else ''
+        data['role'] = instance.get_role_display()
         return data
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'avatar']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'avatar', 'role']
         extra_kwargs = {
             'password': {
                 'write_only': True

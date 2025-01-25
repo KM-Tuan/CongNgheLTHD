@@ -1,15 +1,10 @@
-from pickle import FALSE
-from turtledemo.penrose import start
-import tkinter
-
 from rest_framework import viewsets, generics, permissions
 from social.models import Category, Topic, Post, User, Comment, Like, Haha, Love
 from social import serializers, paginators, perms
 from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 
-
-
+from social.perms import IsAdmin, IsLecturer, IsAlumni
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):  # API Category
     queryset = Category.objects.all()
@@ -110,6 +105,21 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User
     @action(methods=['get'], url_path='current-user', detail=False, permission_classes=[permissions.IsAuthenticated])
     def get_user(self, request):
         return Response(serializers.UserSerializer(request.user).data)
+
+    @action(methods=['get'], url_path='admin-actions', detail=False, permission_classes=[IsAdmin])
+    def admin_actions(self, request):
+        # Dành riêng cho quản trị viên
+        return Response({"message": "Welcome Admin!"})
+
+    @action(methods=['get'], url_path='lecturer-actions', detail=False, permission_classes=[IsLecturer])
+    def lecturer_actions(self, request):
+        # Dành riêng cho giảng viên
+        return Response({"message": "Welcome Lecturer!"})
+
+    @action(methods=['get'], url_path='alumni-actions', detail=False, permission_classes=[IsAlumni])
+    def alumni_actions(self, request):
+        # Dành riêng cho cựu sinh viên
+        return Response({"message": "Welcome Alumni!"})
 
 
 class CommentViewSet(viewsets.ViewSet, generics.DestroyAPIView, generics.UpdateAPIView):

@@ -6,7 +6,20 @@ from cloudinary.models import CloudinaryField
 
 
 class User(AbstractUser):
-    avatar = CloudinaryField(null=True)
+    class Roles(models.TextChoices):
+        ADMIN = 'admin', 'Quản trị viên'
+        LECTURER = 'lecturer', 'Giảng viên'
+        ALUMNI = 'alumni', 'Cựu sinh viên'
+
+    avatar = CloudinaryField(null=True, blank=True)
+    role = models.CharField(
+        max_length=20,
+        choices=Roles.choices,
+        default=Roles.ALUMNI,  # Mặc định là Cựu sinh viên
+    )
+
+    def __str__(self):
+        return f"{self.username} ({self.get_role_display()})"
 
 
 class Category(models.Model):
@@ -44,6 +57,7 @@ class Post(BaseModel):
     image = models.ImageField(upload_to="posts/%Y/%m")
     topic = models.ForeignKey(Topic, on_delete=models.RESTRICT)
     tag = models.ManyToManyField('Tag')  # Quan hệ nhiều nhiều: 1 bài post thì có nhiều tag
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title

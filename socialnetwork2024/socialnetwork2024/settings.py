@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure-p4d6g84q0-wkck)-mj+^asr&ur^d%&k+dmebf1spn7iwf+7^je
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['192.168.1.16']
+
+#KIEU MINH TUAN ALLOWED_HOSTS
 #ALLOWED_HOSTS = ['192.168.110.94']
 
 # Application definition
@@ -155,6 +158,15 @@ OAUTH2_PROVIDER = { 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSO
 # CLIENT_ID = "sk88zYNryhW9rJCe0IWtvc9gTfc6HIrIPU3rZwwo"
 # CLIENT_SECRET = "9ow1onA8S3Xr6kvrFTabEveDFD1RCNZc7aOSy5VOWaF07bP8PouHxkTBVFJ8HM0y47GeaRbU74WUfjDVXafrPLWyvmpY2NufmOU9AC9qaEdang51qWSfrLvLPqjRz3FL"
 
+
+#Client local của Hoàng
+# CLIENT_ID = "cM4zjyT3xpp6RncyTVVszv6M10MDPMma2ROJ38m9"
+# CLIENT_SECRET = "FyqfMZ3JHxGDEjInYjyVAjzD0DNV5Uo2cFZP3HqHbpVZsCCJxHjs0RdKyCpwDk95KVCUZTGlkY3JPKndJVBzCgSJWiwE701PKrsM5SH3PQAOp0RcszVdWAulmypSosPR"
+
+
 #KIEU MINH TUAN
-# CLIENT_ID = "hRWkWbAYvbkKO4R8G6LHeRWcf17Pobk4icaCC3xW"
-# CLIENT_SECRET = "bje4vzlkczK2Y72iTjGw28bCAicB0quEwTQxyt0TvaNn7c6oidXUo5JZqbQHvCjnetjOZmDauFheQz7hTOlwhAygbZUdVFWx4s4KCxlwosd5aIzb43ClQUREJDGZlkWe"
+#CLIENT_ID = "hRWkWbAYvbkKO4R8G6LHeRWcf17Pobk4icaCC3xW"
+#CLIENT_SECRET = "bje4vzlkczK2Y72iTjGw28bCAicB0quEwTQxyt0TvaNn7c6oidXUo5JZqbQHvCjnetjOZmDauFheQz7hTOlwhAygbZUdVFWx4s4KCxlwosd5aIzb43ClQUREJDGZlkWe"
+#KIEU MINH TUAN VISUAL CODE
+#CLIENT_ID = "75Ql2NZmMboqNzLkqGnhjhgVAmXEtDkKlm7BmlV4"
+#CLIENT_SECRET = "vzZXtT7cCC32pGw0djXXKWqt4OWCxVEU7mdcvDnBD5YaRJrvQICNS4kdsAolQ1F7IXqxletmmYeh9b4xgEcywY2irRl0lhqAi3HfvThXhcp2M3OZ80sn7g89i6YtmvOt"

@@ -25,7 +25,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'image', 'topic_id']
+        fields = ['id','content', 'title', 'image', 'topic_id', 'created_date']
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -71,12 +71,13 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['avatar'] = instance.avatar.url if instance.avatar else ''
+        data['pic_cover'] = instance.pic_cover.url if instance.pic_cover else ''
         data['role'] = instance.get_role_display()
         return data
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'avatar', 'role']
+        fields = ['id', 'username', 'password', 'first_name', 'last_name', 'avatar', 'role', 'email', 'pic_cover']
         extra_kwargs = {
             'password': {
                 'write_only': True

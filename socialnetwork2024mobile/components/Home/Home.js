@@ -1,80 +1,120 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import HomeStyles from '../../components/Home/HomeStyles';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Chip, Searchbar } from 'react-native-paper';
+import APIs, { endpoints } from '../../configs/APIs';
+import Items from '../Items/Items';
+
 
 
 export default Home = () => {
   const nav = useNavigation();
+  const [categories, setCategories] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [cateId, setCateId] = useState('');
+  const [page, setPage] = useState(1);
+  const [q, setQ] = useState('');
+
+  const loadCates = async () => {
+    let res = await APIs.get(endpoints['categories']);
+    console.info(res.data);
+    setCategories(res.data);
+  }
+
+  const loadTopics = async () => {
+    if (page > 0) {
+      setLoading(true);
+      try {
+        let url = `${endpoints['topics']}?page=${page}`;
+        if (cateId || q) {
+          url = `${url}&category_id=${cateId}&q=${q}`;
+        }
+        console.info(url);
+
+        let res = await APIs.get(url);
+
+        if(page > 1) {
+          setTopics([...topics, ...res.data.results]);
+        }
+        else {
+          setTopics(res.data.results);
+          console.info(res.data.results);
+        }
+
+        if (res.data.next === null) {
+          setPage(0);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }
+
+  const search = (value, callback) => {
+    setPage(1);
+    callback(value);
+  }
+
+  const loadMore = () => {
+    if(page > 0 && !loading){
+      setPage(page + 1);
+    }
+  };
+
+  useEffect(() => {
+    loadCates();
+  }, []);
+
+  useEffect(() => {
+    let timer = setTimeout(() => loadTopics(), 500);
+    return () => clearTimeout(timer);
+  }, [cateId, page, q]);
+
+  const refresh = () => {
+    setPage(1);
+    loadTopics();
+  }
 
   return (
     <View style={HomeStyles.container}>
-      {/* Header */}
+      {/* Header  */}
       <View style={HomeStyles.header}>
-        <Text style={HomeStyles.headerTitle}>Social Network</Text>
-        <TextInput style={HomeStyles.searchBar} placeholder="Search" />
+        <Text style={HomeStyles.headerTitle}>Open University Social Network</Text>
+        
+
+      </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', }}>
+        {categories.map(c => <TouchableOpacity onPress={() => search(c.id, setCateId) } key={c.id} style={HomeStyles.cates}><Chip icon="label" key={c.id}>{c.name}</Chip></TouchableOpacity>)}
+        <TouchableOpacity onPress={() => search(null, setCateId)} style={HomeStyles.cates}><Chip icon="label">Tất cả chủ đề</Chip></TouchableOpacity>
       </View>
 
-      {/* Content */}
-      <ScrollView contentContainerStyle={HomeStyles.content}>
-        {/* Post Input */}
-        <View style={HomeStyles.inputSection}>
-          <Image style={HomeStyles.avatar} source={{uri: 'https://gamek.mediacdn.vn/133514250583805952/2020/7/11/narutossagemode-15944657133061535033027.png'}} />
-          <TouchableOpacity onPress={() => nav.navigate('post')}>
-            <Text style={HomeStyles.input}>Bạn đang nghĩ về điều gì?</Text>
-          </TouchableOpacity>
-        </View>
+      {loading && <ActivityIndicator />}
+      <Searchbar style={HomeStyles.searchBar} placeholder="Tìm kiếm chủ đề" value={q} onChangeText={t => search(t, setQ) } />
 
-        {/* Post */}
-        <View style={HomeStyles.post}>
-          <View style={HomeStyles.HeaderRow}>
-            <Image style={HomeStyles.postAvatar} source={{uri: 'https://gamek.mediacdn.vn/133514250583805952/2020/7/11/narutossagemode-15944657133061535033027.png'}} />
-            <View style={HomeStyles.HeaderCol}>
-              <Text style={HomeStyles.postAuthor}>Cựu SV A</Text>
-              <Text style={HomeStyles.postDate}>Ngày đăng tải: 20/01/2025</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <FontAwesome name="star" size={20} color="#2e3192" style={{marginLeft: 70, marginRight: 8}}/>
-                <Text style={HomeStyles.postCategory}>Trao đổi</Text>
-            </View>
-            
-          </View>
-          <Text style={HomeStyles.postTitle}>Học lập trình nên bắt đầu từ đâu?</Text>
-          <Text style={HomeStyles.postContent}>Trong thời gian gần đây em đang bị phân vân không biết nên bắt đầu học lập trình từ đâu? Và gặp phải những trở ngại khó khăn gì? Mọi người có thể cho em xin vài lời khuyên được không ạ?</Text>
-          <Text style={HomeStyles.postTag}>#Hỏi & Đáp</Text>
-          <Image style={HomeStyles.postImage} source={{uri: 'https://gamek.mediacdn.vn/133514250583805952/2020/7/11/narutossagemode-15944657133061535033027.png'}} />
-          <View style={HomeStyles.postFooter}>
-            <Text style={HomeStyles.postStats}>10 like, 22 haha, 1 love</Text>
-            <Text style={HomeStyles.postComments}>2 bình luận</Text>
-          </View>
-          <View style={HomeStyles.actions}>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <FontAwesome name="thumbs-up" size={20} color="black" style={{ marginRight: 12 }}/>
-              <Text style={HomeStyles.actionButton}>Thích</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <FontAwesome name="comment" size={20} color="black" style={{ marginRight: 12 }}/>
-              <Text style={HomeStyles.actionButton}>Bình luận</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+      <FlatList  refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh}/>} onEndReached={loadMore} data={topics} style={HomeStyles.content} renderItem={({ item }) => <Items item={item} routeName='postlist' params={{'topicId': item.id}}/>} />
 
-      {/* Footer */}
+
+
+      {/* Footer 
       <View style={HomeStyles.footer}>
         <TouchableOpacity style={HomeStyles.footerButton}>
-        <FontAwesome name="home" size={24} color="black" style={HomeStyles.icon} />
+          <FontAwesome name="home" size={24} color="black" style={HomeStyles.icon} />
           <Text style={HomeStyles.footerButton}>Trang chủ</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nav.navigate('personal')} style={HomeStyles.footerButton}>
-        <FontAwesome name="user" size={24} color="#00000060" style={HomeStyles.icon} />
+          <FontAwesome name="user" size={24} color="#00000060" style={HomeStyles.icon} />
           <Text style={HomeStyles.footerButton}>Cá nhân</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => nav.navigate('menu')} style={HomeStyles.footerButton}>
-        <FontAwesome name="bars" size={24} color="#00000060" style={HomeStyles.icon} />
+          <FontAwesome name="bars" size={24} color="#00000060" style={HomeStyles.icon} />
           <Text style={HomeStyles.footerButton}>Tiện ích</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

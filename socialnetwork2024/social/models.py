@@ -12,6 +12,7 @@ class User(AbstractUser):
         ALUMNI = 'alumni', 'Cựu sinh viên'
 
     avatar = CloudinaryField(null=True, blank=True)
+    pic_cover = CloudinaryField(null=True, blank=True)
     role = models.CharField(
         max_length=20,
         choices=Roles.choices,

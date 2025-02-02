@@ -18,30 +18,22 @@ export default StyleSheet.create({
     input: { flex: 1, fontSize: 14 },
 
     // Content
-    editSection: { marginBottom: 20, padding: 10, backgroundColor: '#fff', borderRadius: 5, elevation: 1 },
+    editSection: { marginBottom: 10, padding: 10, backgroundColor: '#fff', borderRadius: 5, elevation: 1 },
     edit: { flex: 1, fontSize: 14, height: 300, textAlignVertical: 'top' },
 
-    // Image
-    insertImageButton: {
-        backgroundColor: '#007BFF',
-        padding: 10,
-        marginTop: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    insertImageText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    previewImage: {
-    width: 100,
-    height: 100,
-    marginTop: 10,
-    borderRadius: 5,
-},
+    box: {flexDirection: 'row'},
 
     // Topics
+    picker: { fontSize: 16, width: 200, marginBottom: 10, backgroundColor: '#fff', borderRadius: 5, elevation: 1 },
+
+    // Image
+    image: { marginBottom: 10, backgroundColor: '#fff', borderRadius: 5, elevation: 1, padding: 10},
+    addImage: { fontSize: 16, width: 160, marginBottom: 10, marginLeft: 12, textAlign: 'center', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#fff', borderRadius: 5, elevation: 1 },
+    showImage: { width: 'auto   ', height: 175, },
 
     //Save
+    submit: { flex: 1, justifyContent: 'center', alignItems: 'center'},
+    submitButton: { width: 150, padding: 10, fontSize: 16, borderRadius: 5, textAlign: 'center', marginLeft: 10, fontWeight: 'bold', backgroundColor: '#2e3192', color: '#ccc'},
+
+
 });

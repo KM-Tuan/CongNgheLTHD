@@ -85,7 +85,7 @@ export default Home = () => {
       {/* Header  */}
       <View style={HomeStyles.header}>
         <Text style={HomeStyles.headerTitle}>Open University Social Network</Text>
-        
+
 
       </View>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start', }}>
@@ -100,7 +100,7 @@ export default Home = () => {
 
 
 
-      {/* Footer 
+      {/* Footer
       <View style={HomeStyles.footer}>
         <TouchableOpacity style={HomeStyles.footerButton}>
           <FontAwesome name="home" size={24} color="black" style={HomeStyles.icon} />

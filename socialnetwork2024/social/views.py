@@ -45,6 +45,13 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
 
         return [permissions.AllowAny()]
 
+    def get_reaction_count(self, post):
+        return {
+            "like": post.like_set.filter(active=True).count(),
+            "haha": post.haha_set.filter(active=True).count(),
+            "love": post.love_set.filter(active=True).count()
+        }
+
     def validate_reaction(self, user, post, reaction_type):
         """
         Kiểm tra xem user đã thả cảm xúc nào khác chưa.
@@ -75,7 +82,12 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
         if not created:
             like.active = not like.active
             like.save()
-        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
+
+        reaction_count = self.get_reaction_count(post)
+        #return Response({'reaction_counts': self.get_reaction_count(post)})
+        response_data = serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data
+        response_data['reaction_counts'] = reaction_count
+        return Response(response_data)
 
     @action(methods=['post'], url_path='hahas', detail=True)
     def haha(self, request, pk):
@@ -85,7 +97,11 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
         if not created:
             haha.active = not haha.active
             haha.save()
-        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
+        reaction_count = self.get_reaction_count(post)
+        #return Response({'reaction_counts': self.get_reaction_count(post)})
+        response_data = serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data
+        response_data['reaction_counts'] = reaction_count
+        return Response(response_data)
 
     @action(methods=['post'], url_path='loves', detail=True)
     def love(self, request, pk):
@@ -95,7 +111,11 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
         if not created:
             love.active = not love.active
             love.save()
-        return Response(serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data)
+        reaction_count = self.get_reaction_count(post)
+        #return Response({'reaction_counts': self.get_reaction_count(post)})
+        response_data = serializers.PostDetailsSerializer(self.get_object(), context={'request': request}).data
+        response_data['reaction_counts'] = reaction_count
+        return Response(response_data)
 
 
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):  # API User

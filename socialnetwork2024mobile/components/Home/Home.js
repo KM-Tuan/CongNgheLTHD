@@ -32,7 +32,7 @@ export default Home = () => {
         if (cateId || q) {
           url = `${url}&category_id=${cateId}&q=${q}`;
         }
-        console.info(url);
+        // console.info(url);
 
         let res = await APIs.get(url);
 
@@ -48,7 +48,7 @@ export default Home = () => {
           setPage(0);
         }
       } catch (error) {
-        console.error(error);
+        // console.error(error);
       } finally {
         setLoading(false);
       }
@@ -97,24 +97,6 @@ export default Home = () => {
       <Searchbar style={HomeStyles.searchBar} placeholder="Tìm kiếm chủ đề" value={q} onChangeText={t => search(t, setQ) } />
 
       <FlatList  refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh}/>} onEndReached={loadMore} data={topics} style={HomeStyles.content} renderItem={({ item }) => <Items item={item} routeName='postlist' params={{'topicId': item.id}}/>} />
-
-
-
-      {/* Footer
-      <View style={HomeStyles.footer}>
-        <TouchableOpacity style={HomeStyles.footerButton}>
-          <FontAwesome name="home" size={24} color="black" style={HomeStyles.icon} />
-          <Text style={HomeStyles.footerButton}>Trang chủ</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => nav.navigate('personal')} style={HomeStyles.footerButton}>
-          <FontAwesome name="user" size={24} color="#00000060" style={HomeStyles.icon} />
-          <Text style={HomeStyles.footerButton}>Cá nhân</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => nav.navigate('menu')} style={HomeStyles.footerButton}>
-          <FontAwesome name="bars" size={24} color="#00000060" style={HomeStyles.icon} />
-          <Text style={HomeStyles.footerButton}>Tiện ích</Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 };

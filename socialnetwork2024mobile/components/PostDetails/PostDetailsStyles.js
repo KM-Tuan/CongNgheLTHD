@@ -18,9 +18,9 @@ export default StyleSheet.create({
     postImage: { width: 355, height: 175, marginRight: 10, marginBottom: 5 },
     postAuthor: { fontSize: 16, fontWeight: 'bold' },
     postDate: { fontSize: 12, color: '#555' },
-    postCategory: { marginTop: 20, marginLeft: 100, fontSize: 12 },
+    postCategory: { marginTop: 4, fontSize: 12 },
     postTitle: { fontSize: 14, marginBottom: 5 },
-    postContent: { fontSize: 14, marginBottom: 5 },
+    postContent: { fontSize: 14},
     postTag: { fontSize: 14, color: '#007BFF', marginBottom: 5 },
     postFooter: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
     postStats: { fontSize: 12, color: '#555' },
@@ -30,8 +30,8 @@ export default StyleSheet.create({
 
     //My Comment
     myComment: { flexDirection: 'row', backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 10, elevation: 1 },
-    MyContent: { width: 290, padding: 5, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 },
-    saveComment: { width: 50, padding: 5, fontSize: 14, borderRadius: 5, textAlign: 'center', marginLeft: 10, fontWeight: 'bold', backgroundColor: '#2e3192', color: '#ccc'},
+    MyContent: { width: 310, padding: 5, borderWidth: 1, borderColor: '#ccc', borderRadius: 5 },
+    saveComment: { width: 50, padding: 5, fontSize: 14, borderRadius: 5, textAlign: 'center', marginLeft: 10, fontWeight: 'bold', backgroundColor: '#2e3192', color: '#fff'},
 
     //Comments
     comment: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 10, elevation: 1 },

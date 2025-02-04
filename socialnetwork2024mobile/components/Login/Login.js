@@ -19,13 +19,11 @@ export default Login = () => {
     const [loading, setLoading] = useState(false);
     const users = {
         "username": {
-            "title": "Username",
             "holder": "abc@gmail.com",
             "field": "username",
             "secure": false
         },
         "password": {
-            "title": "Password",
             "holder": "*********",
             "field": "password",
             "secure": true
@@ -41,9 +39,10 @@ export default Login = () => {
     const login = async () => {
         try {
             setLoading(true);
+            // Nhớ đổi 2 client cho phù hợp
             const res = await APIs.post(endpoints['login'], {
-                "client_id": "cM4zjyT3xpp6RncyTVVszv6M10MDPMma2ROJ38m9",
-                "client_secret": "FyqfMZ3JHxGDEjInYjyVAjzD0DNV5Uo2cFZP3HqHbpVZsCCJxHjs0RdKyCpwDk95KVCUZTGlkY3JPKndJVBzCgSJWiwE701PKrsM5SH3PQAOp0RcszVdWAulmypSosPR",
+                "client_id": "XCgtqHuFcmj87uELtluQfnAHrf12SCm1ZH1sxHPs",
+                "client_secret": "hpoVsLd6WPPXvRGsdfW5bZjsP3KewIfg0baBhiuH9ssGJeiaZP0Dq9uJBwhGEE3GYaTALtB9jtOVjBUhMYMdaqRvLRYGHyqswQRT3O944fxkv1wB08AeHdurY2exjosD",
                 "grant_type": "password",
                 ...user
             });

@@ -37,4 +37,5 @@ export default StyleSheet.create({
     footer: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 10, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#ddd'},
     footerButton: { fontSize: 16, color: 'black', textAlign: 'center', alignItems: 'center'},
     icon: {marginBottom: 5},
+    noPostsMessage: {textAlign: 'center', marginTop: 20, fontSize: 16, color: '#888',},
 });

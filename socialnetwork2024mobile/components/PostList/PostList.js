@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import RenderHTML from 'react-native-render-html';
 import { useContext } from 'react';
 import { MyUserConText } from '../../configs/UserContexts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -31,13 +32,46 @@ export default PostList = ({ route }) => {
     return `${day}/${month}/${year}`;                            // Định dạng theo kiểu dd/MM/yyyy
   };
 
-   // Hàm xử lý khi nhấn nút phản ứng
-   const handleToggleReaction = (postId, reaction) => {
-    setReactionsState((prevState) => ({
-      ...prevState,
-      [postId]: prevState[postId] === reaction ? '' : reaction, // Nếu đã nhấn rồi thì bỏ, nếu chưa nhấn thì gán phản ứng
-    }));
+  // Hàm xử lý khi nhấn nút phản ứng
+  const handleToggleReaction = async (postId, reaction) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const endpoint = reaction === 'like' ? endpoints['reaction-like'](postId)
+                      : reaction === 'haha' ? endpoints['reaction-haha'](postId)
+                      : endpoints['reaction-love'](postId);
+  
+      // Nếu phản ứng hiện tại là cùng loại, gửi yêu cầu để hủy phản ứng
+      const isActive = reactionsState[postId] === reaction;
+  
+      // Gửi yêu cầu cập nhật phản ứng lên server
+      const res = await APIs.post(endpoint, {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      const updatedPost = res.data;
+  
+      // Cập nhật lại danh sách bài viết với thông tin mới từ server
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => (post.id === postId ? updatedPost : post))
+      );
+  
+      // Cập nhật trạng thái phản ứng của người dùng
+      setReactionsState((prevState) => ({
+        ...prevState,
+        [postId]: isActive ? '' : reaction // Nếu đã nhấn phản ứng, hủy phản ứng
+      }));
+    } catch (error) {
+      console.error('Error toggling reaction:', error);
+    }
   };
+
+
+  // setReactionsState((prevState) => ({
+  //     ...prevState,
+  //     [postId]: prevState[postId] === reaction ? '' : reaction, // Nếu đã nhấn rồi thì bỏ, nếu chưa nhấn thì gán phản ứng
+  //   }));
 
   const loadPosts = async () => {
     let res = await APIs.get(endpoints['posts'](topicId))
@@ -99,33 +133,29 @@ export default PostList = ({ route }) => {
                   </Text>
                   <Text style={PostListStyles.postTag}>#{p.topic.name}</Text>
                   <Image style={PostListStyles.postImage} source={{ uri: p.image }} />
-                  <View style={PostListStyles.postFooter}>
-                    <Text style={PostListStyles.postStats}>10 like, 22 haha, 1 love</Text>
-                    <Text style={PostListStyles.postComments}>2 bình luận</Text>
-                  </View>
                   <View style={PostListStyles.actions}>
                     <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => handleToggleReaction(p.id, 'like')}>
-                    <Image
+                      <Image
                         source={reactionsState[p.id] === 'like' ? images.like.active : images.like.inactive}
-                        style={{ width: 24, height: 24, marginRight: 4 , marginBottom: 3}}
+                        style={{ width: 24, height: 24, marginRight: 4, marginBottom: 3 }}
                       />
                       <Text style={PostListStyles.actionButton}>Like</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => handleToggleReaction(p.id, 'love')}>
-                    <Image
+                      <Image
                         source={reactionsState[p.id] === 'love' ? images.love.active : images.love.inactive}
                         style={{ width: 22, height: 22, marginRight: 4 }}
                       />
                       <Text style={PostListStyles.actionButton}>Love</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => handleToggleReaction(p.id, 'haha')}>
-                    <Image
+                      <Image
                         source={reactionsState[p.id] === 'haha' ? images.haha.active : images.haha.inactive}
                         style={{ width: 28, height: 28, marginRight: 2 }}
                       />
                       <Text style={PostListStyles.actionButton}>Haha</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => nav.navigate('postdetails', {'postId': p.id})} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => nav.navigate('postdetails', { 'postId': p.id })} style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <Image source={require('./assets/icons/comment.png')} style={{ width: 25, height: 25, marginRight: 6 }} />
                       <Text style={PostListStyles.actionButton}>Bình luận</Text>
                     </TouchableOpacity>

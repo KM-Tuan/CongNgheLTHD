@@ -75,7 +75,7 @@ export default PostDetail = ({ route }) => {
                     <Text style={PostDetailsStyles.postTag}>#{postDetails.topic.name}</Text>
                     <Image style={PostDetailsStyles.postImage} source={{ uri: postDetails.image }} />
                     <View style={PostDetailsStyles.postFooter}>
-                        <Text style={PostDetailsStyles.postStats}>10 like, 22 haha, 1 love</Text>
+                        <Text style={PostDetailsStyles.postStats}>{postDetails.reaction_counts.like} like, {postDetails.reaction_counts.haha} haha, {postDetails.reaction_counts.love} love</Text>
                         <Text style={PostDetailsStyles.postComments}>2 bình luận</Text>
                     </View>
                     <View style={PostDetailsStyles.actions}>

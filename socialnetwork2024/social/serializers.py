@@ -67,7 +67,7 @@ class PostDetailsSerializer(PostSerializer):
     like = serializers.SerializerMethodField()
     haha = serializers.SerializerMethodField()
     love = serializers.SerializerMethodField()
-
+    reaction_counts = serializers.SerializerMethodField()
     def get_like(self,post):
         request = self.context.get('request')
         if request.user.is_authenticated:
@@ -83,9 +83,16 @@ class PostDetailsSerializer(PostSerializer):
         if request.user.is_authenticated:
             return post.love_set.filter(user=request.user, active=True).exists()
 
+    def get_reaction_counts(self, post):
+        return {
+            "like": post.like_set.filter(active=True).count(),
+            "haha": post.haha_set.filter(active=True).count(),
+            "love": post.love_set.filter(active=True).count(),
+        }
+
     class Meta:
         model = PostSerializer.Meta.model
-        fields = PostSerializer.Meta.fields + ['content', 'tag', 'like', 'haha', 'love']
+        fields = PostSerializer.Meta.fields + ['content', 'tag', 'like', 'haha', 'love', 'reaction_counts']
 
 
 class CommentSerializer(serializers.ModelSerializer):

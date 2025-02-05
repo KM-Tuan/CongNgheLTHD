@@ -1,7 +1,7 @@
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const BASE_URL = 'http://192.168.1.219:8000/'
+const BASE_URL = 'http://192.168.1.16:8000/'
 
 export const endpoints = {
     'categories': '/categories/',
@@ -16,6 +16,7 @@ export const endpoints = {
     'reaction-like': (postId) => `/posts/${postId}/likes/`,
     'reaction-haha': (postId) => `/posts/${postId}/hahas/`,
     'reaction-love': (postId) => `/posts/${postId}/loves/`, 
+    'my-posts': '/posts/my-posts/',
 }
 
 export const authApis = async () => {

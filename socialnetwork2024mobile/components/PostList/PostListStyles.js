@@ -22,7 +22,7 @@ export default StyleSheet.create({
     HeaderRow: { flexDirection: 'row', marginBottom: 5},
     HeaderCol: { flexDirection: 'column'},
     postAvatar: { width: 40, height: 40, backgroundColor: '#ccc', borderRadius: 20, marginRight: 10 },
-    postImage: { width: 355, height: 175, marginBottom: 5 },
+    postImage: { width: 'auto', height: 175, marginBottom: 5 },
     postAuthor: { fontSize: 16, fontWeight: 'bold' },
     postDate: { fontSize: 12, color: '#555' },
     postCategory: { marginTop: 4, fontSize: 12 },

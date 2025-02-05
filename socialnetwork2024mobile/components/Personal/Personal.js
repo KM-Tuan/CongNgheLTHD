@@ -1,9 +1,13 @@
-import { View, Text, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, ScrollView, useWindowDimensions } from 'react-native';
 import PersonalStyles from '../../components/Personal/PersonalStyles';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useContext } from 'react';
+import { useContext, useEffect, useState} from 'react';
 import { MyUserConText } from '../../configs/UserContexts';
+import { ActivityIndicator } from 'react-native-paper';
+import moment from 'moment';
+import RenderHTML from 'react-native-render-html';
+import { authApis, endpoints } from '../../configs/APIs';
 
 
 
@@ -11,14 +15,27 @@ import { MyUserConText } from '../../configs/UserContexts';
 export default Personal = () => {
   const nav = useNavigation();
   const user = useContext(MyUserConText);
+  const [myPosts, setMyPosts] = useState(null);
+  const { width: contentWidth } = useWindowDimensions();
+
+  const loadMyPosts = async () => {
+    try{
+      let api = await authApis();
+      let res = await api.get(endpoints['my-posts']);
+      setMyPosts(res.data);
+      console.info(res.data);
+    }catch(err){
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    loadMyPosts();
+  }, []);
 
   return (
     <View style={PersonalStyles.container}>
-      {/* Header */}
-      <View style={PersonalStyles.header}>
-        <Text style={PersonalStyles.headerTitle}>Social Network</Text>
-        <TextInput style={PersonalStyles.searchBar} placeholder="Search" />
-      </View>
+      
 
       {/* Content */}
       <ScrollView contentContainerStyle={PersonalStyles.content}>
@@ -30,40 +47,34 @@ export default Personal = () => {
         </View>
 
 
-
-
         {/* Post */}
-        <View style={PersonalStyles.post}>
+        {myPosts === null ? <ActivityIndicator/> : <>
+        {myPosts.map(p => <View key={p.id} style={PersonalStyles.post}>
           <View style={PersonalStyles.HeaderRow}>
-            <Image style={PersonalStyles.postAvatar} source={{ uri: 'https://gamek.mediacdn.vn/133514250583805952/2020/7/11/narutossagemode-15944657133061535033027.png' }} />
+            <Image style={PersonalStyles.postAvatar} source={{ uri: p.user.avatar || 'https://res.cloudinary.com/djlyy5s5e/image/upload/v1738552067/default_avatar_user_jjl7xy.png' }} />
             <View style={PersonalStyles.HeaderCol}>
-              <Text style={PersonalStyles.postAuthor}>Cựu SV A</Text>
-              <Text style={PersonalStyles.postDate}>Ngày đăng tải: 20/01/2025</Text>
+              <Text style={PersonalStyles.postAuthor}>{p.user.first_name || "null"} {p.user.last_name || "null"}</Text>
+              <Text style={PersonalStyles.postDate}>{moment(p.created_date).fromNow()}</Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="star" size={15} color="#2e3192" style={{ marginLeft: 50, marginRight: 5}} />
-              <Text style={PersonalStyles.postCategory}>Trao đổi</Text>
+              <FontAwesome name="star" size={15} color="#2e3192" style={{ marginLeft: 150, marginRight: 5}} />
+              <Text style={PersonalStyles.postCategory}>{p.topic.category.name}</Text>
             </View>
           </View>
-          <Text style={PersonalStyles.postTitle}>Học lập trình nên bắt đầu từ đâu?</Text>
-          <Text style={PersonalStyles.postContent}>Trong thời gian gần đây em đang bị phân vân không biết nên bắt đầu học lập trình từ đâu? Và gặp phải những trở ngại khó khăn gì? Mọi người có thể cho em xin vài lời khuyên được không ạ?</Text>
-          <Text style={PersonalStyles.postTag}>#Hỏi & Đáp</Text>
-          <Image style={PersonalStyles.postImage} source={{ uri: 'https://gamek.mediacdn.vn/133514250583805952/2020/7/11/narutossagemode-15944657133061535033027.png' }} />
-          <View style={PersonalStyles.postFooter}>
-            <Text style={PersonalStyles.postStats}>10 like, 22 haha, 1 love</Text>
-            <Text style={PersonalStyles.postComments}>2 bình luận</Text>
-          </View>
+          <Text style={PersonalStyles.postTitle}>{p.title}</Text>
+          <Text style={PersonalStyles.postContent}>
+            <RenderHTML contentWidth={contentWidth} source={{ 'html': p.content }} />
+          </Text>
+          <Text style={PersonalStyles.postTag}>#{p.topic.name}</Text>
+          <Image style={PersonalStyles.postImage} source={{ uri: p.image }} />
           <View style={PersonalStyles.actions}>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="thumbs-up" size={20} color="black" style={{ marginRight: 12 }} />
-              <Text style={PersonalStyles.actionButton}>Thích</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => nav.navigate('postdetails')} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome name="comment" size={20} color="black" style={{ marginRight: 12 }} />
+            <TouchableOpacity onPress={() => nav.navigate('postdetails', { 'postId': p.id })} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={require('../../components/PostList/assets/icons/comment.png')} style={{ width: 25, height: 25, marginRight: 6 }} />
               <Text style={PersonalStyles.actionButton}>Bình luận</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View>)}
+        </>}
       </ScrollView>
     </View>
   );

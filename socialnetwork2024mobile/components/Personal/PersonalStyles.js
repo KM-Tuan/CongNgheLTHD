@@ -10,7 +10,7 @@ export default StyleSheet.create({
     content: { padding: 10 },
 
     info: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 20, elevation: 1 },
-    avatarCover: { width: 'auto', height: 80, marginBottom: 5 },
+    avatarCover: { width: 'auto', height: 180, marginBottom: 5 },
     avatar: { width: 100, height: 100, marginBottom: 5, marginLeft: 20, marginTop: -40, borderRadius: 50 },
     author: { fontSize: 20, fontWeight: 'bold', marginLeft: 140, marginTop: -48, marginBottom: 30},
 
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     HeaderRow: { flexDirection: 'row', marginBottom: 5},
     HeaderCol: { flexDirection: 'column'},
     postAvatar: { width: 40, height: 40, backgroundColor: '#ccc', borderRadius: 20, marginRight: 10 },
-    postImage: { width: 'auto', height: 175, marginBottom: 5 },
+    postImage: { width: 'auto', height: 200, marginBottom: 5 },
     postAuthor: { fontSize: 16, fontWeight: 'bold' },
     postDate: { fontSize: 12, color: '#555' },
     postCategory: { marginTop: 4, fontSize: 12 },

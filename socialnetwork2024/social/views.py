@@ -40,10 +40,19 @@ class PostViewSet(viewsets.ViewSet, generics.RetrieveAPIView):  # API Post
     serializer_class = serializers.PostDetailsSerializer
 
     def get_permissions(self):
-        if self.action in ['get_comments', 'like', 'haha', 'love'] and self.request.method in ['POST']:
+        if self.action in ['get_comments', 'like', 'haha', 'love', 'my_posts'] and self.request.method in ['POST']:
             return [permissions.IsAuthenticated()]
 
         return [permissions.AllowAny()]
+
+    @action(methods=['get'], url_path='my-posts', detail=False)
+    def my_posts(self, request):
+        """API lấy danh sách các bài đăng của user hiện tại"""
+        user = request.user
+        user_posts = Post.objects.filter(user=user, active=True).select_related('topic__category').prefetch_related(
+            'tag')
+        serializer = serializers.PostSerializer(user_posts, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def get_reaction_count(self, post):
         return {

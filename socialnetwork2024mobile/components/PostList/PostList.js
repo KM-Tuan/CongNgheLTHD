@@ -87,22 +87,9 @@ export default PostList = ({ route }) => {
 
   return (
     <View style={PostListStyles.container}>
-      {/* Header */}
-      <View style={PostListStyles.header}>
-        <Text style={PostListStyles.headerTitle}>Social Network</Text>
-        <TextInput style={PostListStyles.searchBar} placeholder="Search" />
-      </View>
 
       {/* Content */}
       <ScrollView contentContainerStyle={PostListStyles.content}>
-
-        {/* Post Input */}
-        <View style={PostListStyles.inputSection}>
-          <Image style={PostListStyles.avatar} source={{ uri: user?._j?.avatar || "null" }} />
-          <TouchableOpacity onPress={() => nav.navigate('post')}>
-            <Text style={PostListStyles.input}>Bạn đang nghĩ về điều gì?</Text>
-          </TouchableOpacity>
-        </View>
 
         {posts === null ? (
           <ActivityIndicator />

@@ -18,5 +18,5 @@
 - Lecturer
     - Đăng bài đăng sự kiện/khảo sát
 - Alumni
-    Đăng bài đăng
+    - Đăng bài đăng
       
